@@ -12,6 +12,11 @@ from .permissions import IsOwnerOrReadOnly, IsStaff, IsUser
 from django.contrib.auth import logout
 from rest_framework.views import APIView
 from django.core.cache import cache
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin,RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.permissions import IsAuthenticated
+from .models import Provider
+from .serializers import ProviderSerializer
 
 class UserRegisterView(GenericAPIView, mixins.UpdateModelMixin):
     serializer_class = UserRegisterSerializer
@@ -131,3 +136,31 @@ class RefreshTokenView(APIView):
         cache.set("token", tokens)
         return Response(tokens)
 
+
+
+class ProviderListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
+    queryset = Provider.objects.all()
+    serializer_class = ProviderSerializer
+    permission_classes = [IsAuthenticated]  
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+class ProviderDetailView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    queryset = Provider.objects.all()
+    serializer_class = ProviderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

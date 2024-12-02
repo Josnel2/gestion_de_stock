@@ -1,4 +1,4 @@
-from .models import User, OneTimePasscode
+from .models import User, OneTimePasscode, Provider
 from rest_framework import serializers
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
@@ -159,5 +159,10 @@ class LogoutUserSerializer(serializers.Serializer):
             token.blacklist()
         except TokenError:
             return self.fail('bad_token')
+        
+class ProviderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Provider
+        fields = "__all__"
         
 

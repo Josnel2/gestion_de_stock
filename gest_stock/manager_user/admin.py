@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, OneTimePasscode
+from .models import User, OneTimePasscode,Provider
 
 class AdminUser(admin.ModelAdmin):
     list_display = ('email', 'first_name', 'last_name', 'phone_number')
@@ -7,4 +7,5 @@ class AdminUser(admin.ModelAdmin):
 
 admin.site.register(User, AdminUser)
 admin.site.register(OneTimePasscode)
+admin.site.register(Provider)
 # Register your models here.

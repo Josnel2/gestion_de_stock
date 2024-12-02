@@ -19,12 +19,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Redéfinition avec des related_name uniques
     groups = models.ManyToManyField(
         Group,
-        related_name="custom_user_groups",  # Nom unique pour éviter les conflits
+        related_name="custom_user_groups",  
         blank=True
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name="custom_user_permissions",  # Nom unique pour éviter les conflits
+        related_name="custom_user_permissions",  
         blank=True
     )
 
@@ -52,4 +52,12 @@ class OneTimePasscode(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.first_name}-passcode"
-    
+
+class Provider(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Nom du fournisseur")
+    email = models.EmailField(max_length=255, unique=True, verbose_name="Adresse e-mail")
+    phone_number = models.CharField(max_length=20, verbose_name="Numéro de téléphone")
+    address = models.TextField(verbose_name="Adresse")
+
+    def __str__(self):
+        return self.name
