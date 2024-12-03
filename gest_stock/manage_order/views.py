@@ -5,6 +5,10 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin,RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework import status
+from .models import Product
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 class ProductListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
     queryset = Product.objects.all()
@@ -37,4 +41,29 @@ class ProductDetailView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, De
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+class UpdateStockView(APIView):
+    def post(self, request, pk):
+        try:
+            product = Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            return Response({"error": "Produit introuvable"}, status=status.HTTP_404_NOT_FOUND)
 
+        status = request.data.get("action")  
+        quantity = int(request.data.get("quantity", 0))
+
+        if status not in ["increase", "decrease"]:
+            return Response({"error": "Action invalide. Utilisez 'increase' ou 'decrease'."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if status == "increase":
+            product.stock_quantity += quantity
+        elif status == "decrease":
+            if product.stock_quantity - quantity < 0:
+                return Response({"error": "Stock insuffisant pour cette action."}, status=status.HTTP_400_BAD_REQUEST)
+            product.stock_quantity -= quantity
+
+        product.save()
+        response_data = ProductSerializer(product).data
+        if product.is_below_threshold():
+            response_data["warning"] = f"Le produit {product.name} est en dessous du seuil minimal !"
+
+        return Response(response_data, status=status.HTTP_200_OK)
