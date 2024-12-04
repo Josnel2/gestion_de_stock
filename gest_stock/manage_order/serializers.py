@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from manage_order.models import Product
+from manage_order.models import Product,Provider
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -7,3 +7,9 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
         
+        
+class ProviderSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Provider
+        fields = "__all__"

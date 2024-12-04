@@ -12,7 +12,6 @@ from .permissions import IsOwnerOrReadOnly, IsStaff, IsUser
 from django.contrib.auth import logout
 from rest_framework.views import APIView
 from django.core.cache import cache
-from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin,RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
 from .models import Provider
