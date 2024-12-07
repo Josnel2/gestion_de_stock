@@ -46,13 +46,3 @@ class OneTimePasscode(models.Model):
         return f"{self.user.first_name}-passcode"
 
 
-class Provider(models.Model):
-    name = models.CharField(max_length=255, verbose_name="Nom du fournisseur")
-    email = models.EmailField(max_length=255, unique=True, verbose_name="Adresse e-mail")
-    phone_number = models.CharField(max_length=20, verbose_name="Numéro de téléphone")
-    address = models.TextField(verbose_name="Adresse")
-    Product = models.ForeignKey(Product, on_delete=models.CASCADE , default=None)
-
-    def __str__(self):
-        return self.name
- 

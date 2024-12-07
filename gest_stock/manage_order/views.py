@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer,ProviderSerializer,OrderSerializer
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin,RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from rest_framework.mixins import ListModelMixin, CreateModelMixin,RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
 from .models import Provider
-from .serializers import ProviderSerializer
 
 
 class ProductListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
@@ -86,6 +85,33 @@ class ProviderListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
 class ProviderDetailView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
     queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+class ProviderListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
+    queryset = Provider.objects.all()
+    serializer_class = ProviderSerializer
+    permission_classes = [IsAuthenticated]  
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+class OrderDetailView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    queryset = Provider.objects.all()
+    serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from manage_order.models import Product,Provider
+from manage_order.models import Product,Provider,Order
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -13,3 +13,10 @@ class ProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Provider
         fields = "__all__"
+        
+class OrderSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Order
+        fields = "__all__"
+        
