@@ -6,12 +6,11 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin,RetrieveModel
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import status
-from .models import Product
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.mixins import ListModelMixin, CreateModelMixin,RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
-from .models import Provider
+from .models import Provider,Order,Product
 
 
 class ProductListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
@@ -98,16 +97,18 @@ class ProviderDetailView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, D
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
-class ProviderListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
-    queryset = Provider.objects.all()
-    serializer_class = ProviderSerializer
+    
+    
+class OrderListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]  
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+    
     
 class OrderDetailView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
     queryset = Provider.objects.all()
