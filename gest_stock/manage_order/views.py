@@ -10,7 +10,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.mixins import ListModelMixin, CreateModelMixin,RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
-from .models import Provider,Order,Product
+from .models import Provider,Order,Product,Sale
+from django.db.models import Sum, F
+
 
 
 class ProductListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin):
@@ -126,3 +128,29 @@ class OrderDetailView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, Dest
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+
+
+class StatistiquesAPIView(APIView):
+    def get(self, request):
+        total_commandes = Order.objects.count()
+        total_ventes = Sale.objects.aggregate(
+        total=Sum(F('quantity') * F('Product__price')) )['total']
+        total_revenu = total_ventes or 0 
+        profit = total_ventes * 0.2 if total_ventes else 0
+        return Response({
+            "commandes": total_commandes,
+            "ventes": total_ventes,
+            "profit": profit,
+            "revenu": total_revenu
+        })
+
+class ProduitsLesPlusVendusAPIView(APIView):
+    def get(self, request):
+        product = (
+            Sale.objects.values('Product__name')
+            .annotate(total_vendu=Sum('quantity'))
+            .order_by('-total_vendu')[:5]
+        )
+        return Response(product)

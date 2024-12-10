@@ -47,3 +47,14 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Commande #{self.pk} - {self.product.name} par {self.user.username}"
+
+
+class Sale(models.Model):
+    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    User  = models.ForeignKey(User, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    date = models.DateField(auto_now_add=True)
+
+    @property
+    def montant_total(self):
+        return self.Product.price * self.quantity
