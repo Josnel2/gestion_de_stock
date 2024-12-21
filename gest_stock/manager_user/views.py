@@ -130,6 +130,4 @@ class RefreshTokenView(APIView):
         tokens = user.tokens()
         cache.set("token", tokens)
         return Response(tokens)
-
-
-
+ 

@@ -20,7 +20,12 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = "__all__"
         
+
 class SaleSerializer(serializers.ModelSerializer):
-    class Meta :
-        model = Sale 
-        fields = "__all__"
+    total_amount = serializers.ReadOnlyField()  
+
+    class Meta:
+        model = Sale
+        fields = ['id', 'product', 'user', 'quantity', 'sale_date', 'total_amount']
+        read_only_fields = ['sale_date']  
+

@@ -132,6 +132,7 @@ class OrderDetailView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, Dest
 
 
 
+
 class StatistiquesAPIView(APIView):
     def get(self, request):
         total_commandes = Order.objects.count()
@@ -154,3 +155,4 @@ class ProduitsLesPlusVendusAPIView(APIView):
             .order_by('-total_vendu')[:5]
         )
         return Response(product)
+
