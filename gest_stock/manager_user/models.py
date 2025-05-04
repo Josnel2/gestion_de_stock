@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.tokens import RefreshToken
 from .manager import UserManager
+from manage_order.models import Product
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name=_('email address'), max_length=255, unique=True)
@@ -17,17 +18,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_login = models.DateTimeField(auto_now=True)
 
     # Redéfinition avec des related_name uniques
-    groups = models.ManyToManyField(
-        Group,
-        related_name="custom_user_groups",  # Nom unique pour éviter les conflits
-        blank=True
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name="custom_user_permissions",  # Nom unique pour éviter les conflits
-        blank=True
-    )
-
+    groups = models.ManyToManyField( Group, related_name="custom_user_groups",  blank=True )
+    user_permissions = models.ManyToManyField(Permission, related_name="custom_user_permissions",  blank=True )
     objects = UserManager()
 
     USERNAME_FIELD = "email"
@@ -52,4 +44,5 @@ class OneTimePasscode(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.first_name}-passcode"
-    
+
+

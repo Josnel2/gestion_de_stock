@@ -11,5 +11,6 @@ urlpatterns = [
     path('update-profile/<int:pk>/', UpdateProfileView.as_view(), name='update-profile'),
     path('logout/', LogoutUserView.as_view(), name='logout'),
     path('refresh-token/', RefreshTokenView.as_view(), name='refresh_token'),
+   
     
 ]
