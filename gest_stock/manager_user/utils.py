@@ -5,7 +5,7 @@ from django.conf import settings
 
 def generateOtp(): # or we can use the library pyotp
     otp = ""
-    for i in range(8):
+    for i in range(5):
         otp += str(random.randint(1,9))
     return otp
 
@@ -13,7 +13,7 @@ def send_code_to_user(email):
     subject = "one time code password for email verification"
     otp_code = generateOtp()
     user = User.objects.get(email=email)
-    current_site = "myAuth.com"
+    current_site = "pamelfichieu.com"
     email_body = f"Hi {user.first_name}, thanks for signing up on {current_site} please verify your email with the \n one time passcode {otp_code}"
     from_email = settings.EMAIL_HOST_USER
 
