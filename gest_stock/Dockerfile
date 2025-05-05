@@ -1,10 +1,9 @@
 FROM python:3.12.5
 
-ENV PYTHONBUFFERS 1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
-ENV PYTHONDONTWRTEBYTECODE 1
-
-RUN mkdir/app
+RUN mkdir /app
 
 WORKDIR /app
 
@@ -12,12 +11,14 @@ COPY . /app
 
 RUN python -m venv /env
 
-ENV paths /env/scripts:$PATH
+ENV PATH="/env/bin:$PATH"
 
-RUN -m pip install --upgrade pip
-
-COPY entrypoint.sh /app/entrypoint.sh
+RUN python -m pip install --upgrade pip
 
 COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt
+
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
